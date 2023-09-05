@@ -5,7 +5,7 @@ class ReactiveEffect {
     }
     run() {
         activeEffect = this;
-        this._fn();
+        return this._fn();
     }
 }
 //维护一个指针,指向当前正在使用的effect
@@ -14,7 +14,9 @@ let activeEffect;
 export function effect(fn) {
     //fn
     const _effect = new ReactiveEffect(fn);
-    _effect.run();
+    const runner = _effect.run.bind(_effect)
+    runner()
+    return runner
 }
 //首先创建一个map用于存储所有的target
 const targetMap = new Map()
